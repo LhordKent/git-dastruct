@@ -123,7 +123,7 @@ public class Main {
         serveCustomerButton.addActionListener(e -> {
             try {
                 String servedCustomer = manager.serveCustomer();
-                reportArea.setText("Served Customer: " + servedCustomer);  // Only show the served customer
+                reportArea.setText("Served Customerr: " + servedCustomer);  // Only show the served customer
                 updateQueueDisplay();
             } catch (IllegalStateException ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());
