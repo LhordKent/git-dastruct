@@ -1,17 +1,20 @@
-
 package CustomerManagement;
 
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
 
 class Manager {
     private Queue<Customer> generalQueue;
     private Stack<Customer> vipStack;
+    private List<Customer> servedCustomers;
 
     public Manager() {
         generalQueue = new LinkedList<>();
         vipStack = new Stack<>();
+        servedCustomers = new ArrayList<>();
     }
 
     public void addGeneralCustomer(String name) {
@@ -23,15 +26,24 @@ class Manager {
     }
 
     public String serveCustomer() {
+        Customer servedCustomer;
         if (!vipStack.isEmpty()) {
-            Customer servedCustomer = vipStack.pop();
-            return servedCustomer.getName();
+            // Use an auxiliary stack to reverse the order
+            Stack<Customer> auxStack = new Stack<>();
+            while (!vipStack.isEmpty()) {
+                auxStack.push(vipStack.pop());
+            }
+            servedCustomer = auxStack.pop();
+            while (!auxStack.isEmpty()) {
+                vipStack.push(auxStack.pop());
+            }
         } else if (!generalQueue.isEmpty()) {
-            Customer servedCustomer = generalQueue.poll();
-            return servedCustomer.getName();
+            servedCustomer = generalQueue.poll();
         } else {
             throw new IllegalStateException("No customers in the queue.");
         }
+        servedCustomers.add(servedCustomer);
+        return servedCustomer.getName();
     }
 
     public String getQueueStatus() {
@@ -46,5 +58,9 @@ class Manager {
         }
 
         return status.toString();
+    }
+
+    public List<Customer> getServedCustomers() {
+        return servedCustomers;
     }
 }
